@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Peoples, Category
 from .serializers import PeopleSerializer, CategorySerializer
- 
+
 
 class PeopleAPIView(APIView):
     def get(self, request):
