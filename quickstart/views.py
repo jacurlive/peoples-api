@@ -7,6 +7,21 @@ from .models import Peoples, Category
 from .serializers import PeopleSerializer, CategorySerializer
 
 
+class PeopleAPIList(generics.ListCreateAPIView):
+    queryset = Peoples.objects.filter(is_published=True)
+    serializer_class = PeopleSerializer
+
+
+class PeopleAPIUpdate(generics.UpdateAPIView):
+    queryset = Peoples.objects.filter(is_published=True)
+    serializer_class = PeopleSerializer
+
+
+class PeopleAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Peoples.objects.filter(is_published=True)
+    serializer_class = PeopleSerializer
+
+
 class PeopleAPIView(APIView):
     def get(self, request):
         objects = Peoples.objects.filter(is_published=True)

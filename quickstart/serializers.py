@@ -8,10 +8,10 @@ class PeopleSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "last_name", "nickname", "content", "birth_date", "cat")
 
 
-class CategorySerializer(serializers.Serializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ("name",)
+        fields = ("id", "name")
 
     # name = serializers.CharField(max_length=150)
 
