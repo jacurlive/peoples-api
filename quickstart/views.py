@@ -22,46 +22,59 @@ class PeopleAPIDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PeopleSerializer
 
 
-class PeopleAPIView(APIView):
-    def get(self, request):
-        objects = Peoples.objects.filter(is_published=True)
-        return Response({'peoples': PeopleSerializer(objects, many=True).data})
+# class PeopleAPIView(APIView):
+#     def get(self, request):
+#         objects = Peoples.objects.filter(is_published=True)
+#         return Response({'peoples': PeopleSerializer(objects, many=True).data})
     
-    def post(self, request):
+#     def post(self, request):
 
-        data = request.data.copy()
+#         data = request.data.copy()
 
-        if 'nickname' not in data:
-            data['nickname'] = None
+#         if 'nickname' not in data:
+#             data['nickname'] = None
 
-        serializer = PeopleSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+#         serializer = PeopleSerializer(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
 
 
-        return Response({'post': serializer.data})
+#         return Response({'post': serializer.data})
     
-    def put(self, request, *args, **kwargs):
+#     def put(self, request, *args, **kwargs):
 
-        data = request.data.copy()
+#         data = request.data.copy()
 
-        if 'nickname' not in data:
-            data['nickname'] = None
+#         if 'nickname' not in data:
+#             data['nickname'] = None
 
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method PUT not allowed"})
         
-        try:
-            instance = Peoples.objects.get(pk=pk)
-        except:
-            return Response({"error": "Object does not exists"})
+#         try:
+#             instance = Peoples.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Object does not exists"})
         
-        serializer = PeopleSerializer(data=data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+#         serializer = PeopleSerializer(data=data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
 
-        return Response({"post": serializer.data})
+#         return Response({"post": serializer.data})
+    
+
+class CategoryPeoplesAPIView(generics.ListAPIView):
+    serializer_class = PeopleSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', None)
+        if pk:
+            try:
+                category = Category.objects.get(pk=pk)
+                return Peoples.objects.filter(is_published=True, cat=category)
+            except Category.DoesNotExist:
+                return Peoples.objects.none() 
     
 
 class CategoryAPIView(APIView):
