@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework import permissions
 from .models import Peoples, Category
 from .serializers import PeopleSerializer, CategorySerializer
 
@@ -6,16 +7,29 @@ from .serializers import PeopleSerializer, CategorySerializer
 class PeopleAPIList(generics.ListCreateAPIView):
     queryset = Peoples.objects.filter(is_published=True)
     serializer_class = PeopleSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [permissions.IsAdminUser()]
+        return super().get_permissions()
 
 
 class PeopleAPIUpdate(generics.UpdateAPIView):
     queryset = Peoples.objects.filter(is_published=True)
     serializer_class = PeopleSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 
 class PeopleAPIDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Peoples.objects.filter(is_published=True)
     serializer_class = PeopleSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_permissions(self):
+        if self.request.method == "POST" or "PATCH" or "DELETE":
+            return [permissions.IsAdminUser()]
+        return super().get_permissions()
 
 
 class CategoryPeoplesAPIView(generics.ListAPIView):
@@ -34,3 +48,9 @@ class CategoryPeoplesAPIView(generics.ListAPIView):
 class CategoryAPIView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [permissions.IsAdminUser()]
+        return super().get_permissions()
