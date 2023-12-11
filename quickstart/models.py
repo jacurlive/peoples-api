@@ -11,7 +11,7 @@ class Category(models.Model):
 class Peoples(models.Model):
     name = models.CharField(max_length=155)
     last_name = models.CharField(max_length=155)
-    nickname = models.CharField(max_length=155, blank=True, null=True)
+    nickname = models.CharField(max_length=155, blank=True, null=True, unique=True)
     content = models.TextField(blank=True)
     birth_date = models.DateField()
     is_published = models.BooleanField(default=False)
